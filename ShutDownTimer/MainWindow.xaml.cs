@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Timers;
+using System.Windows.Threading;
+using System.Diagnostics;
 
 namespace ShutDownTimer
 {
@@ -26,8 +28,32 @@ namespace ShutDownTimer
         {
             InitializeComponent();
 
-            sCurrentTime =  DateTime.Now.ToString("h:mm:ss tt");
-            TimeLabel.Content = sCurrentTime;
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Tick += UpdateTime;
+            timer.Start();
+
+
         }
+        private void TimeLabel_Loaded(object sender, RoutedEventArgs e)
+        {
+            sCurrentTime = DateTime.Now.ToString("h:mm:ss tt");
+            TimeLabel.Content = "System Time : " + sCurrentTime;
+        }
+
+        public void UpdateTime(object sender, EventArgs e)
+        {
+            sCurrentTime = DateTime.Now.ToString("h:mm:ss tt");
+            TimeLabel.Content = "System Time : " + sCurrentTime;
+        }
+
+        public void ExecuteShutdown()
+        {
+            var psi = new ProcessStartInfo("shutdown", "/s /t 0");
+            psi.CreateNoWindow = true;
+            psi.UseShellExecute = false;
+            Process.Start(psi);
+        }
+
     }
 }
