@@ -32,13 +32,13 @@ namespace ShutDownTimer
         private void TimeLabel_Loaded(object sender, RoutedEventArgs e)
         {
             sCurrentTime = DateTime.Now.ToString("h:mm:ss tt");
-            TimeLabel.Content = "System Time : " + sCurrentTime;
+            TimeLabel.Content = "The Time Is " + sCurrentTime;
         }
 
         public void UpdateTime(object sender, EventArgs e)
         {
             sCurrentTime = DateTime.Now.ToString("h:mm:ss tt");
-            TimeLabel.Content = "System Time : " + sCurrentTime;
+            TimeLabel.Content = "The Time Is " + sCurrentTime;
             UpdateShutdownTimeIn();
         }
 
