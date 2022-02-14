@@ -9,4 +9,4 @@ then just set the timer to just over 3 hours to be safe and it will turn off.
 - Currently not available on linux / macOS (Soon...)
 
 ## Preview
-![Screenshot 2022-02-14 134903](https://user-images.githubusercontent.com/23617317/153876328-c581c782-105a-44a7-b4d3-7ddc24431435.png)
+![Screenshot 2022-02-14 1343333903](https://user-images.githubusercontent.com/23617317/153876648-4b6e626c-be31-4f54-8510-318df524e68b.png)
