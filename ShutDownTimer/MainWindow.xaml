@@ -5,16 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ShutDownTimer"
         mc:Ignorable="d"
-        Title="Shutdown Timer - Prototype" Height="300" Width="600" ResizeMode="CanMinimize" WindowStyle="SingleBorderWindow" Icon="/assets/icoClock.jpg" Topmost="True">
+        Title="Shutdown Timer - Prototype" Height="350" Width="600" ResizeMode="CanMinimize" WindowStyle="SingleBorderWindow" Icon="/assets/icoClock.jpg" Topmost="True">
     <Grid>
-        <Label x:Name="TimeLabel" Content="The Time Is " HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,19,0,0" FontFamily="Lucida Sans Unicode" Loaded="TimeLabel_Loaded" FontSize="20"/>
-        <Button x:Name="btnStart" Content="Start Timer" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" IsDefault="True" Height="30" Width="116" Click="btnStart_Click" BorderBrush="{x:Null}" Background="{x:Null}" FontSize="20" FontFamily="Lucida Sans Unicode" FontWeight="Bold" BorderThickness="0,0,0,0"/>
-        <Button x:Name="btnCancel" Content="Cancel" HorizontalAlignment="Left" Margin="10,0,10,10" VerticalAlignment="Bottom" IsDefault="True" Height="30" Width="75" Click="btnCancel_Click" Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Lucida Sans Unicode" FontWeight="Bold" FontSize="20" IsCancel="True" BorderThickness="0,0,0,0"/>
-        <Label x:Name="ShutdownInTimeLabel" Content="Press Start Timer ..." HorizontalAlignment="Center" FontFamily="Lucida Sans" Loaded="TimeLabel_Loaded" Background="#FFE8E8E8" VerticalAlignment="Bottom" Margin="0,0,0,20"/>
-        <TextBox x:Name="HourLabel" HorizontalAlignment="Left" Margin="246,74,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="39" TextAlignment="Center" MaxLength="2" TextChanged="HourLabel_TextChanged" BorderBrush="{x:Null}" FontSize="30" BorderThickness="0,0,0,0"/>
-        <TextBlock HorizontalAlignment="Left" Margin="246,58,0,0" TextWrapping="Wrap" Text="Hour(s)" VerticalAlignment="Top" FontFamily="Lucida Sans Unicode" Opacity="0.5"/>
-        <TextBlock HorizontalAlignment="Left" Margin="314,58,0,0" TextWrapping="Wrap" Text="Mins(s)" VerticalAlignment="Top" FontFamily="Lucida Sans Unicode" Opacity="0.5"/>
-        <TextBox x:Name="MinLabel" HorizontalAlignment="Left" Margin="314,74,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="39" TextAlignment="Center" MaxLength="2" TextChanged="MinLabel_TextChanged" BorderBrush="{x:Null}" FontSize="30" BorderThickness="0,0,0,0"/>
+        <Label x:Name="TimeLabel" Content="The Time Is " HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,19,0,0" FontFamily="Segoe UI Light" Loaded="TimeLabel_Loaded" FontSize="20"/>
+        <Button x:Name="btnStart" Content="Start Timer" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" IsDefault="True" Height="30" Width="116" Click="btnStart_Click" BorderBrush="{x:Null}" Background="{x:Null}" FontSize="20" FontFamily="Segoe UI Semibold" FontWeight="Bold" BorderThickness="0,0,0,0"/>
+        <Button x:Name="btnCancel" Content="Cancel" HorizontalAlignment="Left" Margin="10,0,10,10" VerticalAlignment="Bottom" IsDefault="True" Height="30" Width="75" Click="btnCancel_Click" Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Segoe UI Semibold" FontWeight="Bold" FontSize="20" IsCancel="True" BorderThickness="0,0,0,0"/>
+        <Label x:Name="ShutdownInTimeLabel" Content="Press Start Timer ..." HorizontalAlignment="Center" FontFamily="Segoe UI" Loaded="TimeLabel_Loaded" Background="#7FE8E8E8" VerticalAlignment="Bottom" Margin="0,0,0,20"/>
+        <TextBox x:Name="HourLabel" HorizontalAlignment="Left" Margin="246,74,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="39" TextAlignment="Center" MaxLength="2" TextChanged="HourLabel_TextChanged" BorderBrush="{x:Null}" FontSize="30" BorderThickness="0,0,0,0" FontFamily="Segoe UI Semibold"/>
+        <TextBlock HorizontalAlignment="Left" Margin="246,58,0,0" TextWrapping="Wrap" Text="Hour(s)" VerticalAlignment="Top" FontFamily="Segoe UI Semilight" Opacity="0.5"/>
+        <TextBlock HorizontalAlignment="Left" Margin="314,58,0,0" TextWrapping="Wrap" Text="Mins(s)" VerticalAlignment="Top" FontFamily="Segoe UI Semilight" Opacity="0.5"/>
+        <TextBox x:Name="MinLabel" HorizontalAlignment="Left" Margin="314,74,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="39" TextAlignment="Center" MaxLength="2" TextChanged="MinLabel_TextChanged" BorderBrush="{x:Null}" FontSize="30" BorderThickness="0,0,0,0" FontFamily="Segoe UI Semibold"/>
+        <Image HorizontalAlignment="Center" Height="161" Margin="0,94,0,0" VerticalAlignment="Top" Width="296" Source="/assets/icoClock.jpg" Opacity="0.26" Panel.ZIndex="-2"/>
 
     </Grid>
 </Window>

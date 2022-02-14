@@ -15,9 +15,13 @@ namespace ShutDownTimer
         DispatcherTimer timer = new();
         DispatcherTimer shutdownTimer = new();
         TimeSpan _time = new TimeSpan(0,0,0,0);
+        TimeSpan timeTimerStarted = new TimeSpan(0,0,0,0);
+        TimeSpan timeLeft = new TimeSpan(0,0,0,0); 
         public MainWindow()
         {
             InitializeComponent();
+
+            timeTimerStarted = new TimeSpan(0, Int32.Parse(DateTime.Now.Hour.ToString()), Int32.Parse(DateTime.Now.Minute.ToString()), Int32.Parse(DateTime.Now.Second.ToString()));
 
             // Timer to update system time
             timer.Interval = TimeSpan.FromSeconds(1);
@@ -40,6 +44,15 @@ namespace ShutDownTimer
             sCurrentTime = DateTime.Now.ToString("h:mm:ss tt");
             TimeLabel.Content = "The Time Is " + sCurrentTime;
             UpdateShutdownTimeIn();
+
+            if (HourLabel.Text == "0" && MinLabel.Text == "0")
+            {
+                btnStart.IsEnabled = false;
+            }
+            else
+            {
+                btnStart.IsEnabled=true;
+            }
         }
 
         public void UpdateShutdownTimer()
@@ -48,22 +61,23 @@ namespace ShutDownTimer
             {
                 if (MinLabel != null)
                 {
-                    _time = new TimeSpan(0, Int32.Parse(HourLabel.Text), 0, Int32.Parse(MinLabel.Text));
+                    _time = new TimeSpan(0, Int32.Parse(HourLabel.Text), Int32.Parse(MinLabel.Text), 0);
                     shutdownTimer.Interval = _time;
                 }
             }
-
+            timeLeft = timeTimerStarted - _time;
         }
 
         public void UpdateShutdownTimeIn()
         {
-            if (_time.TotalMinutes == 0)
+            if (_time.TotalMinutes == 0 && _time.TotalHours == 0)
             {
                 ShutdownInTimeLabel.Content = "Press Start Timer To Begin ...";
             }
             else
             {
-                ShutdownInTimeLabel.Content = "System Shutting Down In " + _time.Hours + " Hours " + _time.Minutes + " Minutes";
+                //ShutdownInTimeLabel.Content = "System Shutting Down In " + _time.Hours + " Hours " + _time.Minutes + " Minutes " + _time.Seconds + " Seconds";
+                //ShutdownInTimeLabel.Content = "System Shutting Down In " + timeLeft.Hours + " Hours " + timeLeft.Minutes + " Minutes " + timeLeft.Seconds + " Seconds";
             }
         }
 
@@ -84,6 +98,10 @@ namespace ShutDownTimer
             HourLabel.IsEnabled = false;
             MinLabel.IsEnabled = false;
             WindowState = WindowState.Minimized;
+
+            timeTimerStarted = new TimeSpan(0, Int32.Parse(DateTime.Now.Hour.ToString()), Int32.Parse(DateTime.Now.Minute.ToString()), Int32.Parse(DateTime.Now.Second.ToString()));
+
+
         }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
