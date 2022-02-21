@@ -1,37 +1,52 @@
-﻿using System;
+﻿#region Using / Includes
+using System;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
+#endregion
 
 namespace ShutDownTimer
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic / Code for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
+        #region Variables
+        //Variable Declares
+        /// <summary>
+        /// Contains current system time to be displayed in XAML
+        /// </summary>
         string sCurrentTime = "Time String";
-        DispatcherTimer timer = new();
-        DispatcherTimer shutdownTimer = new();
-        TimeSpan _time = new TimeSpan(0,0,0,0);
-        TimeSpan timeTimerStarted = new TimeSpan(0,0,0,0);
-        TimeSpan timeLeft = new TimeSpan(0,0,0,0); 
+        /// <summary>
+        /// Determines how often time will update
+        /// </summary>
+        DispatcherTimer tTimer = new();
+        /// <summary>
+        /// Determines how often shutdown text will update in XAML
+        /// </summary>
+        DispatcherTimer tShutdownTimer = new();
+        TimeSpan tsTime = new TimeSpan(0,0,0,0);
+        TimeSpan tsTimeTimerStarted = new TimeSpan(0,0,0,0);
+        TimeSpan tsTimeLeft = new TimeSpan(0,0,0,0);
+        #endregion
+
         public MainWindow()
         {
             InitializeComponent();
 
-            timeTimerStarted = new TimeSpan(0, Int32.Parse(DateTime.Now.Hour.ToString()), Int32.Parse(DateTime.Now.Minute.ToString()), Int32.Parse(DateTime.Now.Second.ToString()));
+            tsTimeTimerStarted = new TimeSpan(0, Int32.Parse(DateTime.Now.Hour.ToString()), Int32.Parse(DateTime.Now.Minute.ToString()), Int32.Parse(DateTime.Now.Second.ToString()));
 
             // Timer to update system time
-            timer.Interval = TimeSpan.FromSeconds(1);
-            timer.Tick += UpdateTime;
-            timer.Start();
+            tTimer.Interval = TimeSpan.FromSeconds(1);
+            tTimer.Tick += UpdateTime;
+            tTimer.Start();
 
             //shutdown
-            _time = new TimeSpan(0,Int32.Parse(HourLabel.Text), Int32.Parse(MinLabel.Text), 0);
-            shutdownTimer.Interval = _time;
-            shutdownTimer.Tick += ExecuteShutdown;
+            tsTime = new TimeSpan(0,Int32.Parse(HourLabel.Text), Int32.Parse(MinLabel.Text), 0);
+            tShutdownTimer.Interval = tsTime;
+            tShutdownTimer.Tick += ExecuteShutdown;
         }
         private void TimeLabel_Loaded(object sender, RoutedEventArgs e)
         {
@@ -61,16 +76,30 @@ namespace ShutDownTimer
             {
                 if (MinLabel != null)
                 {
-                    _time = new TimeSpan(0, Int32.Parse(HourLabel.Text), Int32.Parse(MinLabel.Text), 0);
-                    shutdownTimer.Interval = _time;
+                    if (IsTextAllowed(HourLabel.Text) && IsTextAllowed(MinLabel.Text))
+                    {
+                        tsTime = new TimeSpan(0, Int32.Parse(HourLabel.Text), Int32.Parse(MinLabel.Text), 0);
+                        tShutdownTimer.Interval = tsTime;
+                    }
+                    else
+                    {
+                        HourLabel.Text = "0";
+                        MinLabel.Text = "0";
+                    }
                 }
             }
-            timeLeft = timeTimerStarted - _time;
+            tsTimeLeft = tsTimeTimerStarted - tsTime;
+        }
+
+        private static readonly System.Text.RegularExpressions.Regex _regex = new System.Text.RegularExpressions.Regex("[^0-9.-]+"); //regex that contains all illegal text
+        private static bool IsTextAllowed(string text)
+        {
+            return !_regex.IsMatch(text);
         }
 
         public void UpdateShutdownTimeIn()
         {
-            if (_time.TotalMinutes == 0 && _time.TotalHours == 0)
+            if (tsTime.TotalMinutes == 0 && tsTime.TotalHours == 0)
             {
                 ShutdownInTimeLabel.Content = "Press Start Timer To Begin ...";
             }
@@ -93,20 +122,20 @@ namespace ShutDownTimer
         private void btnStart_Click(object sender, RoutedEventArgs e)
         {
             //Timer to execute shutdown
-            shutdownTimer.Start();
+            tShutdownTimer.Start();
             btnStart.IsEnabled = false;
             HourLabel.IsEnabled = false;
             MinLabel.IsEnabled = false;
             WindowState = WindowState.Minimized;
 
-            timeTimerStarted = new TimeSpan(0, Int32.Parse(DateTime.Now.Hour.ToString()), Int32.Parse(DateTime.Now.Minute.ToString()), Int32.Parse(DateTime.Now.Second.ToString()));
+            tsTimeTimerStarted = new TimeSpan(0, Int32.Parse(DateTime.Now.Hour.ToString()), Int32.Parse(DateTime.Now.Minute.ToString()), Int32.Parse(DateTime.Now.Second.ToString()));
 
 
         }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
-            shutdownTimer.Stop();
+            tShutdownTimer.Stop();
             btnStart.IsEnabled = true;
             HourLabel.IsEnabled = true;
             MinLabel.IsEnabled= true;
