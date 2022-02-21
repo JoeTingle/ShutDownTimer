@@ -3,6 +3,7 @@ using System;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Threading;
 #endregion
 
@@ -29,7 +30,10 @@ namespace ShutDownTimer
         DispatcherTimer tShutdownTimer = new();
         TimeSpan tsTime = new TimeSpan(0,0,0,0);
         TimeSpan tsTimeTimerStarted = new TimeSpan(0,0,0,0);
+        TimeSpan tsWillShutdownAt = new TimeSpan(0, 0, 0, 0);
         TimeSpan tsTimeLeft = new TimeSpan(0,0,0,0);
+
+        bool bTimerStarted = false;
         #endregion
 
         public MainWindow()
@@ -57,7 +61,7 @@ namespace ShutDownTimer
         public void UpdateTime(object sender, EventArgs e)
         {
             sCurrentTime = DateTime.Now.ToString("h:mm:ss tt");
-            TimeLabel.Content = "The Time Is " + sCurrentTime;
+            TimeLabel.Content = "Current Time : " + sCurrentTime;
             UpdateShutdownTimeIn();
 
             if (HourLabel.Text == "0" && MinLabel.Text == "0")
@@ -66,7 +70,10 @@ namespace ShutDownTimer
             }
             else
             {
-                btnStart.IsEnabled=true;
+                if (bTimerStarted == false)
+                {
+                    btnStart.IsEnabled = true;
+                }
             }
         }
 
@@ -89,6 +96,7 @@ namespace ShutDownTimer
                 }
             }
             tsTimeLeft = tsTimeTimerStarted - tsTime;
+            tsWillShutdownAt = tsTimeTimerStarted + tsTime;
         }
 
         private static readonly System.Text.RegularExpressions.Regex _regex = new System.Text.RegularExpressions.Regex("[^0-9.-]+"); //regex that contains all illegal text
@@ -101,12 +109,15 @@ namespace ShutDownTimer
         {
             if (tsTime.TotalMinutes == 0 && tsTime.TotalHours == 0)
             {
-                ShutdownInTimeLabel.Content = "Press Start Timer To Begin ...";
+                ShutdownInTimeLabel.Visibility = Visibility.Hidden;
+                //ShutdownInTimeLabel.Content = "Press Start Timer To Begin ...";
             }
             else
             {
-                //ShutdownInTimeLabel.Content = "System Shutting Down In " + _time.Hours + " Hours " + _time.Minutes + " Minutes " + _time.Seconds + " Seconds";
-                //ShutdownInTimeLabel.Content = "System Shutting Down In " + timeLeft.Hours + " Hours " + timeLeft.Minutes + " Minutes " + timeLeft.Seconds + " Seconds";
+                ShutdownInTimeLabel.Visibility = Visibility.Visible;
+                ShutdownInTimeLabel.Content = "System Shutting Down At " + tsWillShutdownAt;
+                ShutdownInTimeLabel.Foreground = new SolidColorBrush(Colors.Red);
+                ShutdownInTimeLabel.FontSize = 20;
             }
         }
 
@@ -130,6 +141,7 @@ namespace ShutDownTimer
 
             tsTimeTimerStarted = new TimeSpan(0, Int32.Parse(DateTime.Now.Hour.ToString()), Int32.Parse(DateTime.Now.Minute.ToString()), Int32.Parse(DateTime.Now.Second.ToString()));
 
+            bTimerStarted = true;
 
         }
 
@@ -139,6 +151,11 @@ namespace ShutDownTimer
             btnStart.IsEnabled = true;
             HourLabel.IsEnabled = true;
             MinLabel.IsEnabled= true;
+
+            HourLabel.Text = "0";
+            MinLabel.Text = "0";
+
+            bTimerStarted = false;
         }
 
         private void HourLabel_TextChanged(object sender, TextChangedEventArgs e)
