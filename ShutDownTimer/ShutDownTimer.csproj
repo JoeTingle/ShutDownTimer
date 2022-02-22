@@ -5,19 +5,24 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>assets\icoClock.ico</ApplicationIcon>
+    <ApplicationIcon>assets\timer.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="assets\icoClock.jpg" />
+    <None Remove="assets\timer.ico" />
+    <None Remove="assets\timer.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="assets\icoClock.ico" />
+    <Content Include="assets\timer.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="assets\icoClock.jpg" />
+    <Resource Include="assets\timer.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>

@@ -36,28 +36,43 @@ namespace ShutDownTimer
         bool bTimerStarted = false;
         #endregion
 
+        /// <summary>
+        /// Main entry point
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
 
+            //Initialise the start timer to when application is first loaded
             tsTimeTimerStarted = new TimeSpan(0, Int32.Parse(DateTime.Now.Hour.ToString()), Int32.Parse(DateTime.Now.Minute.ToString()), Int32.Parse(DateTime.Now.Second.ToString()));
 
-            // Timer to update system time
+            // Timer to update system time text
             tTimer.Interval = TimeSpan.FromSeconds(1);
             tTimer.Tick += UpdateTime;
             tTimer.Start();
 
-            //shutdown
+            //Initalise shutdown timer text and update interval
             tsTime = new TimeSpan(0,Int32.Parse(HourLabel.Text), Int32.Parse(MinLabel.Text), 0);
             tShutdownTimer.Interval = tsTime;
             tShutdownTimer.Tick += ExecuteShutdown;
         }
+
+        /// <summary>
+        /// Executes and updates time text when app is loaded
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TimeLabel_Loaded(object sender, RoutedEventArgs e)
         {
             sCurrentTime = DateTime.Now.ToString("h:mm:ss tt");
             TimeLabel.Content = "The Time Is " + sCurrentTime;
         }
 
+        /// <summary>
+        /// Updates all text on app, also enables / disables start button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void UpdateTime(object sender, EventArgs e)
         {
             sCurrentTime = DateTime.Now.ToString("h:mm:ss tt");
@@ -77,6 +92,9 @@ namespace ShutDownTimer
             }
         }
 
+        /// <summary>
+        /// Will update / reset shutdown timer text
+        /// </summary>
         public void UpdateShutdownTimer()
         {
             if (HourLabel != null)
@@ -105,6 +123,9 @@ namespace ShutDownTimer
             return !_regex.IsMatch(text);
         }
 
+        /// <summary>
+        /// Controlls "system shutting down in " text and visibility
+        /// </summary>
         public void UpdateShutdownTimeIn()
         {
             if (tsTime.TotalMinutes == 0 && tsTime.TotalHours == 0)
@@ -115,12 +136,24 @@ namespace ShutDownTimer
             else
             {
                 ShutdownInTimeLabel.Visibility = Visibility.Visible;
-                ShutdownInTimeLabel.Content = "System Shutting Down At " + tsWillShutdownAt;
+                if (tsWillShutdownAt.Hours > 12)
+                {
+                    ShutdownInTimeLabel.Content = "System Shutting Down At " + tsWillShutdownAt + " PM";
+                }
+                else
+                {
+                    ShutdownInTimeLabel.Content = "System Shutting Down At " + tsWillShutdownAt + " AM";
+                }
                 ShutdownInTimeLabel.Foreground = new SolidColorBrush(Colors.Red);
                 ShutdownInTimeLabel.FontSize = 20;
             }
         }
 
+        /// <summary>
+        /// Starts shutdown process in background
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void ExecuteShutdown(object sender, EventArgs e)
         {
             var psi = new ProcessStartInfo("shutdown", "/s /t 0");
@@ -130,6 +163,12 @@ namespace ShutDownTimer
 
         }
 
+        /// <summary>
+        /// Starts shutdown timer aswell as disabling all text fields and start button.
+        /// Also minimizes program
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnStart_Click(object sender, RoutedEventArgs e)
         {
             //Timer to execute shutdown
@@ -145,6 +184,11 @@ namespace ShutDownTimer
 
         }
 
+        /// <summary>
+        /// Cancels shutdown timer and enables text fields and start button to reset.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
             tShutdownTimer.Stop();
@@ -158,11 +202,21 @@ namespace ShutDownTimer
             bTimerStarted = false;
         }
 
+        /// <summary>
+        /// Updates shutdown timer text once user changes hour text
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void HourLabel_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateShutdownTimer();
         }
 
+        /// <summary>
+        /// Updates shutdown timer text once user changes minutes text
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MinLabel_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateShutdownTimer();
