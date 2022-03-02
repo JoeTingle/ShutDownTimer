@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Threading;
+using Microsoft.Toolkit.Uwp.Notifications;
 #endregion
 
 namespace ShutDownTimer
@@ -55,6 +56,7 @@ namespace ShutDownTimer
             tsTime = new TimeSpan(0,Int32.Parse(HourLabel.Text), Int32.Parse(MinLabel.Text), 0);
             tShutdownTimer.Interval = tsTime;
             tShutdownTimer.Tick += ExecuteShutdown;
+            
         }
 
         /// <summary>
@@ -73,7 +75,7 @@ namespace ShutDownTimer
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void UpdateTime(object sender, EventArgs e)
+        public void UpdateTime(object? sender, EventArgs? e)
         {
             sCurrentTime = DateTime.Now.ToString("h:mm:ss tt");
             TimeLabel.Content = "Current Time : " + sCurrentTime;
@@ -136,14 +138,57 @@ namespace ShutDownTimer
             else
             {
                 ShutdownInTimeLabel.Visibility = Visibility.Visible;
-                if (tsWillShutdownAt.Hours > 12)
+                if (tsWillShutdownAt.Days > 0)
                 {
-                    ShutdownInTimeLabel.Content = "System Shutting Down At " + tsWillShutdownAt + " PM";
+                    if (tsWillShutdownAt.Hours > 12)
+                    {
+                        if (tsWillShutdownAt.Minutes < 10)
+                        {
+                            ShutdownInTimeLabel.Content = "System Shutting Down " + tsWillShutdownAt.Days + " Day(s) From Now At " + tsWillShutdownAt.Hours + ":" +  "0" + tsWillShutdownAt.Minutes + " PM";
+                        }
+                        else
+                        {
+                            ShutdownInTimeLabel.Content = "System Shutting Down " + tsWillShutdownAt.Days + " Day(s) From Now At " + tsWillShutdownAt.Hours + ":" + tsWillShutdownAt.Minutes + " PM";
+                        }
+                    }
+                    else
+                    {
+                        if (tsWillShutdownAt.Minutes < 10)
+                        {
+                            ShutdownInTimeLabel.Content = "System Shutting Down " + tsWillShutdownAt.Days + " Day(s) From Now At " + tsWillShutdownAt.Hours + ":" + "0" + tsWillShutdownAt.Minutes + " AM";
+                        }
+                        else
+                        {
+                            ShutdownInTimeLabel.Content = "System Shutting Down " + tsWillShutdownAt.Days + " Day(s) From Now At " + tsWillShutdownAt.Hours + ":" + tsWillShutdownAt.Minutes + " AM";
+                        }
+                    }
                 }
                 else
                 {
-                    ShutdownInTimeLabel.Content = "System Shutting Down At " + tsWillShutdownAt + " AM";
+                    if (tsWillShutdownAt.Hours > 12)
+                    {
+                        if (tsWillShutdownAt.Minutes < 10)
+                        {
+                            ShutdownInTimeLabel.Content = "System Shutting Down At " + tsWillShutdownAt.Hours + ":" + "0" + tsWillShutdownAt.Minutes + " PM";
+                        }
+                        else
+                        {
+                            ShutdownInTimeLabel.Content = "System Shutting Down At " + tsWillShutdownAt.Hours + ":" + tsWillShutdownAt.Minutes + " PM";
+                        }
+                    }
+                    else
+                    {
+                        if (tsWillShutdownAt.Minutes < 10)
+                        {
+                            ShutdownInTimeLabel.Content = "System Shutting Down At " + tsWillShutdownAt.Hours + ":" + "0" + tsWillShutdownAt.Minutes + " AM";
+                        }
+                        else
+                        {
+                            ShutdownInTimeLabel.Content = "System Shutting Down At " + tsWillShutdownAt.Hours + ":" + tsWillShutdownAt.Minutes + " AM";
+                        }
+                    }
                 }
+
                 ShutdownInTimeLabel.Foreground = new SolidColorBrush(Colors.Red);
                 ShutdownInTimeLabel.FontSize = 20;
             }
@@ -154,7 +199,7 @@ namespace ShutDownTimer
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void ExecuteShutdown(object sender, EventArgs e)
+        public void ExecuteShutdown(object? sender, EventArgs? e)
         {
             var psi = new ProcessStartInfo("shutdown", "/s /t 0");
             psi.CreateNoWindow = true;
