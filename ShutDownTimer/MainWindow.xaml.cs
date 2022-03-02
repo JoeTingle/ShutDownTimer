@@ -80,6 +80,8 @@ namespace ShutDownTimer
             sCurrentTime = DateTime.Now.ToString("h:mm:ss tt");
             TimeLabel.Content = "Current Time : " + sCurrentTime;
             UpdateShutdownTimeIn();
+            UpdateShutdownTimer();
+
 
             if (HourLabel.Text == "0" && MinLabel.Text == "0")
             {
@@ -103,10 +105,15 @@ namespace ShutDownTimer
             {
                 if (MinLabel != null)
                 {
-                    if (IsTextAllowed(HourLabel.Text) && IsTextAllowed(MinLabel.Text))
+                    int result;
+                    if (int.TryParse(HourLabel.Text, out result) && int.TryParse(MinLabel.Text, out result))
                     {
-                        tsTime = new TimeSpan(0, Int32.Parse(HourLabel.Text), Int32.Parse(MinLabel.Text), 0);
-                        tShutdownTimer.Interval = tsTime;
+                        if (IsTextAllowed(HourLabel.Text) && IsTextAllowed(MinLabel.Text))
+                        {
+                            tsTime = new TimeSpan(0, Int32.Parse(HourLabel.Text), Int32.Parse(MinLabel.Text), 0);
+                            tShutdownTimer.Interval = tsTime;
+                        }
+
                     }
                     else
                     {
@@ -114,9 +121,11 @@ namespace ShutDownTimer
                         MinLabel.Text = "0";
                     }
                 }
+                tsTimeTimerStarted = new TimeSpan(0, Int32.Parse(DateTime.Now.Hour.ToString()), Int32.Parse(DateTime.Now.Minute.ToString()), Int32.Parse(DateTime.Now.Second.ToString()));
+                tsTimeLeft = tsTimeTimerStarted - tsTime;
+                tsWillShutdownAt = tsTimeTimerStarted + tsTime;
             }
-            tsTimeLeft = tsTimeTimerStarted - tsTime;
-            tsWillShutdownAt = tsTimeTimerStarted + tsTime;
+
         }
 
         private static readonly System.Text.RegularExpressions.Regex _regex = new System.Text.RegularExpressions.Regex("[^0-9.-]+"); //regex that contains all illegal text
@@ -237,7 +246,14 @@ namespace ShutDownTimer
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
             tShutdownTimer.Stop();
-            btnStart.IsEnabled = true;
+            if (HourLabel.Text == "0" && MinLabel.Text == "0")
+            {
+                btnStart.IsEnabled = false;
+            }
+            else
+            {
+                btnStart.IsEnabled = true;
+            }
             HourLabel.IsEnabled = true;
             MinLabel.IsEnabled= true;
 
